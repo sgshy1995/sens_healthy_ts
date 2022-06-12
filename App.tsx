@@ -25,43 +25,57 @@ import Store from "./src/pages/Store";
 import Header from "./src/pages/Header";
 import { View, Text } from "react-native";
 
+export const ThemContext = React.createContext({
+  index: 0,
+  dispatch: (index: number) => {}
+});
+
 const App = () => {
 
+  const [index, setIndex] = React.useState(0);
+
+  const handleChangeIndex = (index: number) => {
+    setIndex(index);
+  }
+
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName: string = '';
+    <ThemContext.Provider value={{index, dispatch: handleChangeIndex}}>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName: string = '';
 
-            if (route.name === 'Home') {
-              iconName = focused
-                ? 'planet'
-                : 'planet-outline';
-            } else if (route.name === 'Recovery') {
-              iconName = focused ? 'heart-circle' : 'heart-circle-outline';
-            } else if (route.name === 'Store') {
-              iconName = focused ? 'basket' : 'basket-outline';
-            } else if (route.name === 'Mine') {
-              iconName = focused ? 'person' : 'person-outline';
-            }
+              if (route.name === 'Home') {
+                iconName = focused
+                  ? 'planet'
+                  : 'planet-outline';
+              } else if (route.name === 'Recovery') {
+                iconName = focused ? 'heart-circle' : 'heart-circle-outline';
+              } else if (route.name === 'Store') {
+                iconName = focused ? 'basket' : 'basket-outline';
+              } else if (route.name === 'Mine') {
+                iconName = focused ? 'person' : 'person-outline';
+              }
 
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          header: route.name === 'Home' ? (props)=>(<Header title={props.route.name} />) : undefined,
-          headerShown: route.name === 'Home',
-          title: route.name === 'Home' ? '首页' : route.name === 'Recovery' ? '康复' : route.name === 'Store' ? '商城' : route.name === 'Mine' ? '我的' : '',
-          tabBarActiveTintColor: '#4F68B0',
-          tabBarInactiveTintColor: 'gray',
-        })}
-      >
-        <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Recovery" component={Recovery} />
-        <Tab.Screen name="Store" component={Store} />
-        <Tab.Screen name="Mine" component={Mine} />
-      </Tab.Navigator>
-    </NavigationContainer>
+              // You can return any component that you like here!
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            header: route.name === 'Home' ? (props)=>(<Header title={props.route.name} />) : undefined,
+            headerShown: route.name === 'Home',
+            title: route.name === 'Home' ? '首页' : route.name === 'Recovery' ? '康复' : route.name === 'Store' ? '商城' : route.name === 'Mine' ? '我的' : '',
+            tabBarActiveTintColor: '#4F68B0',
+            tabBarInactiveTintColor: 'gray',
+          })}
+        >
+          <Tab.Screen name="Home" children={()=><Home />} />
+          <Tab.Screen name="Recovery" component={Recovery} />
+          <Tab.Screen name="Store" component={Store} />
+          <Tab.Screen name="Mine" component={Mine} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </ThemContext.Provider>
+
   );
 };
 

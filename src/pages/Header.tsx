@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Linking, StyleSheet, useColorScheme, View, Image, Text } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Header as HeaderRNE, Tab, TabView } from "@rneui/themed";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { ThemContext } from "../../App";
 
 type HeaderComponentProps = {
   title: string;
@@ -19,11 +20,16 @@ type ParamList = {
 
 const HeaderCenter = () => {
   const [index, setIndex] = React.useState(0);
+  const context = useContext(ThemContext);
+  const handleChangeIndex = (e: number) => {
+    setIndex(e)
+    context.dispatch(e)
+  }
   return (
     <Tab
       containerStyle={styles.tabContainer}
       value={index}
-      onChange={(e) => setIndex(e)}
+      onChange={(e) => handleChangeIndex(e)}
       indicatorStyle={styles.tabIndicator}
       variant="primary"
     >
